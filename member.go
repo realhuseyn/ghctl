@@ -33,11 +33,12 @@ func getMembers(org string, format string) {
 		return *objsAll[i].Login < *objsAll[j].Login
 	})
 
-	if format == "normal" {
+	switch format {
+	case "normal":
 		for _, repo := range objsAll {
 			fmt.Println(*repo.Login)
 		}
-	} else if format == "json" {
+	case "json":
 		bytes, _ := json.Marshal(objsAll)
 		fmt.Println(string(bytes))
 	}

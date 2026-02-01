@@ -4,9 +4,9 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
-	"strings"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/google/go-github/v33/github"
 	"gopkg.in/yaml.v2"
@@ -182,6 +182,7 @@ func createFileWithContent(content string) (fileName string, err error) {
 // TempFileName generates a temporary filename for use in testing or whatever
 func TempFileName() string {
 	randBytes := make([]byte, 16)
-	rand.Read(randBytes)
+	_, err := rand.Read(randBytes)
+	CheckIfError(err)
 	return hex.EncodeToString(randBytes)
 }

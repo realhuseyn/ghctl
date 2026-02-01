@@ -33,11 +33,12 @@ func getTeams(org string, format string) {
 		return *objsAll[i].Name < *objsAll[j].Name
 	})
 
-	if format == "normal" {
+	switch format {
+	case "normal":
 		for _, repo := range objsAll {
 			fmt.Println(*repo.Name)
 		}
-	} else if format == "json" {
+	case "json":
 		bytes, _ := json.Marshal(objsAll)
 		fmt.Println(string(bytes))
 	}
@@ -53,9 +54,10 @@ func getTeam(org string, team *string, format string) {
 		os.Exit(1)
 	}
 
-	if format == "normal" {
+	switch format {
+	case "normal":
 		fmt.Println(*obj.Name)
-	} else if format == "json" {
+	case "json":
 		bytes, _ := json.Marshal(obj)
 		fmt.Println(string(bytes))
 	}

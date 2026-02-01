@@ -34,11 +34,12 @@ func getRepos(org string, format string) {
 		return *objsAll[i].Name < *objsAll[j].Name
 	})
 
-	if format == "normal" {
+	switch format {
+	case "normal":
 		for _, repo := range objsAll {
 			fmt.Println(*repo.Name)
 		}
-	} else if format == "json" {
+	case "json":
 		bytes, _ := json.Marshal(objsAll)
 		fmt.Println(string(bytes))
 	}
@@ -89,9 +90,10 @@ func createOrUpdateRepo(org string,
 		os.Exit(1)
 	}
 
-	if format == "normal" {
+	switch format {
+	case "normal":
 		fmt.Println(*objs.Name)
-	} else if format == "json" {
+	case "json":
 		bytes, _ := json.Marshal(objs)
 		fmt.Println(string(bytes))
 	}
@@ -134,12 +136,13 @@ func getRepo(org string, repo *string, format string) {
 		os.Exit(1)
 	}
 
-	if format == "normal" {
+	switch format {
+	case "normal":
 		fmt.Println(*obj.Name)
-	} else if format == "json" {
+	case "json":
 		bytes, _ := json.Marshal(obj)
 		fmt.Println(string(bytes))
-	} else if format == "yaml" {
+	case "yaml":
 		yamlTop := YamlTop{
 			Github: YamlGithub{
 				Repository: repoToYaml(obj),

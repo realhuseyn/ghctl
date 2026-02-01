@@ -74,7 +74,10 @@ func addFile(org, repo, branch, fileFrom, fileTo, commitMessage, gitEmail, forma
 		log.Fatal(err)
 	}
 	fmt.Println(dir)
-	defer os.RemoveAll(dir)
+	defer func() {
+		err := os.RemoveAll(dir)
+		CheckIfError(err)
+	}()
 
 	// Clone the given repository to the memory
 	repoURL := GenerateRepoURL(org, repo)
@@ -139,7 +142,8 @@ func addFile(org, repo, branch, fileFrom, fileTo, commitMessage, gitEmail, forma
 
 func ensureDirExists(fileName string) {
 	dirName := filepath.Dir(fileName)
-	os.MkdirAll(dirName, os.ModePerm)
+	err := os.MkdirAll(dirName, os.ModePerm)
+	CheckIfError(err)
 }
 
 func copyFile(from, to string) {

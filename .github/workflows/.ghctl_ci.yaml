@@ -1,0 +1,40 @@
+name: ghctl CI Pipeline
+
+on:
+  push:
+  # pull_request:
+  #   branches: [master]
+    
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up Go environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.16"
+          # go-version: "1.25.6"
+      - name: Build
+        run: go build
+      - name: Install golangci-lint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
+            | sh -s -- -b $(go env GOPATH)/bin v1.50.1
+      - name: Add GOPATH/bin to PATH
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+      - name: Run linter
+        run: golangci-lint run
+      - name: "Vet: report likely mistakes in packages"
+        run: go vet ./...
+      - name: Unit Test
+        run: go test ./... -v
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/golang@master
+        with:
+          command: monitor
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Get version
+        run: ./ghctl --version
