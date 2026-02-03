@@ -44,6 +44,6 @@ jobs:
         run: ls -lah artifacts/
       - name: Publish Release on GitHub
         run: |
-            go get github.com/tcnksm/ghr
+            go install github.com/tcnksm/ghr@latest
             VERSION=v$(./artifacts/${PROJECT_REPONAME}_linux_amd64 --version)
             ghr -t ${{ secrets.GITHUB_TOKEN }} -u ${GITHUB_ACTOR} -r ${PROJECT_REPONAME} -c ${{ github.sha }} -n ${VERSION} -delete ${VERSION} ./artifacts/
